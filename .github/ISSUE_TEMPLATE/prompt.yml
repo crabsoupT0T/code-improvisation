@@ -1,0 +1,23 @@
+name: Prompt / idea
+description: Drop an unfinished idea for the room to improvise on
+title: "prompt: "
+labels: ["prompt"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The half-baked idea
+      description: What should the room riff on?
+      placeholder: A tiny CLI that turns GitHub issues into a live coding board...
+    validations:
+      required: true
+  - type: textarea
+    id: snippet
+    attributes:
+      label: Starter snippet (optional)
+      description: Paste code if you have any. Broken is fine.
+      render: javascript
+  - type: input
+    id: call
+    attributes:
+      label: What would a good first remix look like?
