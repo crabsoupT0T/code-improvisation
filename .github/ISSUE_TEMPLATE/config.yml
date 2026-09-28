@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Open the repo
+    url: https://github.com/crabsoupT0T/code-improvisation
+    about: Browse stage/, remixes/, and the site.
+  - name: Contributing guide
+    url: https://github.com/crabsoupT0T/code-improvisation/blob/main/CONTRIBUTING.md
+    about: How to fork, riff, and open a PR.
