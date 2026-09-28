@@ -1,0 +1,106 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b0d10;
+  --fg: #e8edf2;
+  --muted: #8b98a5;
+  --accent: #7dffb3;
+  --card: #151a21;
+  --line: #263041;
+  --amber: #ffd27a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  background: radial-gradient(1200px 600px at 10% -10%, #1b2430, var(--bg));
+  color: var(--fg);
+  line-height: 1.55;
+}
+nav {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1.1rem 1.25rem 0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+nav a.active, nav a:hover { color: var(--accent); }
+.brand {
+  color: var(--fg) !important;
+  font-weight: 800;
+  margin-right: auto;
+}
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 6rem;
+}
+.kicker {
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+h1 { font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.1; margin: 0.4rem 0 1rem; }
+h2 { font-size: 1.25rem; margin: 2rem 0 0.8rem; }
+p, li { color: var(--muted); }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.25rem 1.4rem;
+  margin: 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+a { color: var(--accent); }
+.row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.btn {
+  display: inline-block;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #062014;
+  font-weight: 700;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid #3a4a5c;
+}
+label { display: block; font-size: 0.82rem; color: var(--muted); margin: 0.7rem 0 0.25rem; }
+input, textarea, select {
+  width: 100%;
+  background: #0e1319;
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+}
+.tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--amber);
+  border: 1px solid #5c4a24;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  margin-bottom: 0.45rem;
+}
+.idea-meta { font-size: 0.8rem; color: #6f7d8a; margin-top: 0.6rem; }
