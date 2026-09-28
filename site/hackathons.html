@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hackathons & Ideas — Code Improvisation</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav>
+    <a class="brand" href="index.html">Code Improvisation</a>
+    <a href="index.html">Home</a>
+    <a class="active" href="hackathons.html">Hackathons & Ideas</a>
+    <a href="https://github.com/crabsoupT0T/code-improvisation">Repo</a>
+  </nav>
+  <main>
+    <div class="kicker">Assemble + ship</div>
+    <h1>Hackathons & ideas</h1>
+    <p>
+      Pitch a weekend build. Steal a prompt. Form a squad in the issues.
+      This board is the bulletin wall — GitHub is where the code actually lands.
+    </p>
+
+    <div class="row">
+      <a class="btn" href="https://github.com/crabsoupT0T/code-improvisation/issues/new?template=prompt.yml&title=prompt:%20hackathon%20idea">Post an idea on GitHub</a>
+      <a class="btn ghost" href="https://github.com/crabsoupT0T/code-improvisation/issues?q=is%3Aissue+label%3Aprompt">Browse prompt threads</a>
+    </div>
+
+    <h2>Open hackathon tracks</h2>
+    <div class="grid">
+      <article class="card">
+        <div class="tag">48 hours</div>
+        <strong>Remix the stage</strong>
+        <p>Take anything in <code>stage/</code> and ship a working demo in <code>remixes/</code> or <code>site/</code>.</p>
+      </article>
+      <article class="card">
+        <div class="tag">Web</div>
+        <strong>Make the gathering site better</strong>
+        <p>Live idea wall, voting, user handles, dark/light, whatever helps people assemble.</p>
+      </article>
+      <article class="card">
+        <div class="tag">CLI</div>
+        <strong>Issue → snippet bot</strong>
+        <p>A tiny tool that turns a GitHub issue into a starter file in <code>stage/</code>.</p>
+      </article>
+      <article class="card">
+        <div class="tag">Social</div>
+        <strong>Reddit-style rooms</strong>
+        <p>Fake subreddits as folders: <code>/r/wild-ideas</code>, <code>/r/show-and-tell</code>, <code>/r/help</code>.</p>
+      </article>
+    </div>
+
+    <h2>Drop an idea on this page</h2>
+    <form class="card" id="idea-form">
+      <label for="title">Title</label>
+      <input id="title" name="title" required maxlength="80" placeholder="Realtime pair-improv editor" />
+      <label for="track">Track</label>
+      <select id="track" name="track">
+        <option>Hackathon</option>
+        <option>Weekend riff</option>
+        <option>Web</option>
+        <option>Tooling</option>
+        <option>Wild</option>
+      </select>
+      <label for="body">The idea</label>
+      <textarea id="body" name="body" rows="4" required placeholder="What should a squad build?"></textarea>
+      <label for="who">Your handle (optional)</label>
+      <input id="who" name="who" maxlength="40" placeholder="github username" />
+      <div class="row">
+        <button class="btn" type="submit">Pin idea on this board</button>
+      </div>
+      <p style="margin-bottom:0;font-size:0.85rem">Saved in your browser. Also open a GitHub issue if you want the whole room to see it.</p>
+    </form>
+
+    <h2>Idea board</h2>
+    <div class="grid" id="board"></div>
+  </main>
+  <script>
+    const KEY = "code-improv-ideas";
+    const seed = [
+      {
+        title: "One-line wonder night",
+        track: "Hackathon",
+        body: "Everyone submits a useful program in a single line. Best three get remixed into a page.",
+        who: "room",
+        at: Date.now() - 86400000
+      },
+      {
+        title: "Issue is the feed",
+        track: "Web",
+        body: "Render open GitHub issues on this site so it feels like a subreddit front page.",
+        who: "room",
+        at: Date.now() - 3600000
+      }
+    ];
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        return raw ? JSON.parse(raw) : seed;
+      } catch {
+        return seed;
+      }
+    }
+
+    function save(items) {
+      localStorage.setItem(KEY, JSON.stringify(items));
+    }
+
+    function render() {
+      const board = document.getElementById("board");
+      const items = load().sort((a, b) => b.at - a.at);
+      board.innerHTML = items.map((item) => `
+        <article class="card">
+          <div class="tag">${escapeHtml(item.track || "Idea")}</div>
+          <strong>${escapeHtml(item.title)}</strong>
+          <p>${escapeHtml(item.body)}</p>
+          <div class="idea-meta">${escapeHtml(item.who || "anon")} · ${new Date(item.at).toLocaleString()}</div>
+        </article>
+      `).join("");
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;"
+      }[c]));
+    }
+
+    document.getElementById("idea-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const items = load();
+      items.push({
+        title: title.value.trim(),
+        track: track.value,
+        body: body.value.trim(),
+        who: who.value.trim(),
+        at: Date.now()
+      });
+      save(items);
+      e.target.reset();
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
