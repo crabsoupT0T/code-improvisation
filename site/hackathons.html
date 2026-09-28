@@ -17,13 +17,14 @@
     <div class="kicker">Assemble + ship</div>
     <h1>Hackathons & ideas</h1>
     <p>
-      Pitch a weekend build. Steal a prompt. Form a squad in the issues.
-      This board is the bulletin wall — GitHub is where the code actually lands.
+      The board below is live GitHub issues from
+      <a href="https://github.com/crabsoupT0T/code-improvisation/issues">crabsoupT0T/code-improvisation</a>.
+      Posting an idea opens a real issue so the whole room can comment and send PRs.
     </p>
 
     <div class="row">
-      <a class="btn" href="https://github.com/crabsoupT0T/code-improvisation/issues/new?template=prompt.yml&title=prompt:%20hackathon%20idea">Post an idea on GitHub</a>
-      <a class="btn ghost" href="https://github.com/crabsoupT0T/code-improvisation/issues?q=is%3Aissue+label%3Aprompt">Browse prompt threads</a>
+      <a class="btn" href="https://github.com/crabsoupT0T/code-improvisation/issues/new?labels=prompt&template=prompt.yml">New idea issue</a>
+      <a class="btn ghost" href="https://github.com/crabsoupT0T/code-improvisation/issues?q=is%3Aissue+is%3Aopen">All open threads</a>
     </div>
 
     <h2>Open hackathon tracks</h2>
@@ -36,7 +37,7 @@
       <article class="card">
         <div class="tag">Web</div>
         <strong>Make the gathering site better</strong>
-        <p>Live idea wall, voting, user handles, dark/light, whatever helps people assemble.</p>
+        <p>Voting, handles, filters — whatever helps people assemble.</p>
       </article>
       <article class="card">
         <div class="tag">CLI</div>
@@ -46,102 +47,111 @@
       <article class="card">
         <div class="tag">Social</div>
         <strong>Reddit-style rooms</strong>
-        <p>Fake subreddits as folders: <code>/r/wild-ideas</code>, <code>/r/show-and-tell</code>, <code>/r/help</code>.</p>
+        <p>Treat labels like rooms: prompt, remix-this, web, good-first-improv.</p>
       </article>
     </div>
 
-    <h2>Drop an idea on this page</h2>
+    <h2>Drop an idea</h2>
     <form class="card" id="idea-form">
       <label for="title">Title</label>
       <input id="title" name="title" required maxlength="80" placeholder="Realtime pair-improv editor" />
-      <label for="track">Track</label>
+      <label for="track">Track / label</label>
       <select id="track" name="track">
-        <option>Hackathon</option>
-        <option>Weekend riff</option>
-        <option>Web</option>
-        <option>Tooling</option>
-        <option>Wild</option>
+        <option value="prompt">prompt</option>
+        <option value="remix-this">remix-this</option>
+        <option value="good-first-improv">good-first-improv</option>
       </select>
       <label for="body">The idea</label>
       <textarea id="body" name="body" rows="4" required placeholder="What should a squad build?"></textarea>
-      <label for="who">Your handle (optional)</label>
-      <input id="who" name="who" maxlength="40" placeholder="github username" />
       <div class="row">
-        <button class="btn" type="submit">Pin idea on this board</button>
+        <button class="btn" type="submit">Open as GitHub issue</button>
       </div>
-      <p style="margin-bottom:0;font-size:0.85rem">Saved in your browser. Also open a GitHub issue if you want the whole room to see it.</p>
+      <p style="margin-bottom:0;font-size:0.85rem">
+        Static sites cannot create issues by themselves. This sends you to GitHub with the title, body, and label filled in. Submit there and it will show up on this board.
+      </p>
     </form>
 
-    <h2>Idea board</h2>
+    <h2>Live idea board</h2>
+    <p id="board-status">Loading issues…</p>
     <div class="grid" id="board"></div>
   </main>
   <script>
-    const KEY = "code-improv-ideas";
-    const seed = [
-      {
-        title: "One-line wonder night",
-        track: "Hackathon",
-        body: "Everyone submits a useful program in a single line. Best three get remixed into a page.",
-        who: "room",
-        at: Date.now() - 86400000
-      },
-      {
-        title: "Issue is the feed",
-        track: "Web",
-        body: "Render open GitHub issues on this site so it feels like a subreddit front page.",
-        who: "room",
-        at: Date.now() - 3600000
-      }
-    ];
-
-    function load() {
-      try {
-        const raw = localStorage.getItem(KEY);
-        return raw ? JSON.parse(raw) : seed;
-      } catch {
-        return seed;
-      }
-    }
-
-    function save(items) {
-      localStorage.setItem(KEY, JSON.stringify(items));
-    }
-
-    function render() {
-      const board = document.getElementById("board");
-      const items = load().sort((a, b) => b.at - a.at);
-      board.innerHTML = items.map((item) => `
-        <article class="card">
-          <div class="tag">${escapeHtml(item.track || "Idea")}</div>
-          <strong>${escapeHtml(item.title)}</strong>
-          <p>${escapeHtml(item.body)}</p>
-          <div class="idea-meta">${escapeHtml(item.who || "anon")} · ${new Date(item.at).toLocaleString()}</div>
-        </article>
-      `).join("");
-    }
+    const OWNER = "crabsoupT0T";
+    const REPO = "code-improvisation";
+    const API = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/issues?state=open&per_page=30&sort=updated";
 
     function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, (c) => ({
-        "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;"
-      }[c]));
+      return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+        return ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;" })[c];
+      });
     }
 
-    document.getElementById("idea-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const items = load();
-      items.push({
-        title: title.value.trim(),
-        track: track.value,
-        body: body.value.trim(),
-        who: who.value.trim(),
-        at: Date.now()
-      });
-      save(items);
-      e.target.reset();
-      render();
-    });
+    function excerpt(text) {
+      const clean = String(text || "").replace(/\r/g, "").trim();
+      if (!clean) return "No description yet.";
+      return clean.length > 220 ? clean.slice(0, 220) + "…" : clean;
+    }
 
-    render();
+    function renderIssues(issues) {
+      const board = document.getElementById("board");
+      const status = document.getElementById("board-status");
+      const onlyIssues = issues.filter(function (issue) { return !issue.pull_request; });
+
+      if (!onlyIssues.length) {
+        status.textContent = "No open issues yet. Be the first prompt.";
+        board.innerHTML = "";
+        return;
+      }
+
+      status.textContent = onlyIssues.length + " open thread" + (onlyIssues.length === 1 ? "" : "s") + " from GitHub.";
+      board.innerHTML = onlyIssues.map(function (issue) {
+        const labels = (issue.labels || []).map(function (l) {
+          return '<span class="tag">' + escapeHtml(l.name) + "</span>";
+        }).join(" ") || '<span class="tag">issue</span>';
+        return (
+          '<article class="card">' +
+            labels +
+            "<strong><a href=\"" + escapeHtml(issue.html_url) + "\">#" + issue.number + " · " + escapeHtml(issue.title) + "</a></strong>" +
+            "<p>" + escapeHtml(excerpt(issue.body)) + "</p>" +
+            '<div class="idea-meta">' +
+              escapeHtml(issue.user && issue.user.login) +
+              " · " + issue.comments + " comment" + (issue.comments === 1 ? "" : "s") +
+              " · updated " + new Date(issue.updated_at).toLocaleString() +
+            "</div>" +
+          "</article>"
+        );
+      }).join("");
+    }
+
+    document.getElementById("board-status").textContent = "Loading issues from GitHub…";
+
+    fetch(API, { headers: { Accept: "application/vnd.github+json" } })
+      .then(function (res) {
+        if (!res.ok) throw new Error("GitHub API " + res.status);
+        return res.json();
+      })
+      .then(renderIssues)
+      .catch(function (err) {
+        document.getElementById("board-status").textContent =
+          "Could not load GitHub issues (" + err.message + "). Open the repo issues tab instead.";
+      });
+
+    document.getElementById("idea-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var title = document.getElementById("title").value.trim();
+      var track = document.getElementById("track").value;
+      var body = document.getElementById("body").value.trim();
+      var prefixed = title.toLowerCase().indexOf(track) === 0 ? title : (track + ": " + title);
+      var issueBody =
+        "### The half-baked idea\n\n" + body +
+        "\n\n### Track\n\n" + track +
+        "\n\n_Filed from the Hackathons & Ideas page._\n";
+      var url = "https://github.com/" + OWNER + "/" + REPO +
+        "/issues/new?labels=" + encodeURIComponent(track) +
+        "&title=" + encodeURIComponent(prefixed) +
+        "&body=" + encodeURIComponent(issueBody);
+      window.location.href = url;
+    });
   </script>
 </body>
 </html>
