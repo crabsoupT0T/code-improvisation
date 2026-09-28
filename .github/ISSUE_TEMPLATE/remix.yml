@@ -1,0 +1,23 @@
+name: Remix this
+description: Point the room at a snippet and ask people to riff on it
+title: "remix: "
+labels: ["remix-this"]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: What should people remix?
+      description: Path, issue number, or URL of the original piece
+      placeholder: stage/hello-improv.js
+    validations:
+      required: true
+  - type: textarea
+    id: constraint
+    attributes:
+      label: Constraint / dare
+      description: Optional rule that makes the remix interesting
+      placeholder: No dependencies. Must run in the browser. Keep it under 40 lines.
+  - type: textarea
+    id: why
+    attributes:
+      label: Why this is worth riffing on
