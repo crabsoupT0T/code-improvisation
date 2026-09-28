@@ -4,63 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Code Improvisation</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b0d10;
-      --fg: #e8edf2;
-      --muted: #8b98a5;
-      --accent: #7dffb3;
-      --card: #151a21;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, sans-serif;
-      background: radial-gradient(1200px 600px at 10% -10%, #1b2430, var(--bg));
-      color: var(--fg);
-      line-height: 1.55;
-    }
-    main {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 4rem 1.25rem 6rem;
-    }
-    .kicker {
-      color: var(--accent);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-    h1 { font-size: clamp(2rem, 6vw, 3.4rem); line-height: 1.1; margin: 0.4rem 0 1rem; }
-    p { color: var(--muted); }
-    .card {
-      background: var(--card);
-      border: 1px solid #263041;
-      border-radius: 16px;
-      padding: 1.25rem 1.4rem;
-      margin: 1.5rem 0;
-    }
-    a { color: var(--accent); }
-    .row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
-    .btn {
-      display: inline-block;
-      padding: 0.7rem 1rem;
-      border-radius: 999px;
-      background: var(--accent);
-      color: #062014;
-      font-weight: 700;
-      text-decoration: none;
-    }
-    .btn.ghost {
-      background: transparent;
-      color: var(--fg);
-      border: 1px solid #3a4a5c;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <nav>
+    <a class="brand" href="index.html">Code Improvisation</a>
+    <a class="active" href="index.html">Home</a>
+    <a href="hackathons.html">Hackathons & Ideas</a>
+    <a href="https://github.com/crabsoupT0T/code-improvisation">Repo</a>
+  </nav>
   <main>
     <div class="kicker">Public workshop</div>
     <h1>Coders assemble.<br/>Code gets improvised.</h1>
@@ -80,7 +32,8 @@
       </p>
     </div>
     <div class="row">
-      <a class="btn" href="https://github.com/crabsoupT0T/code-improvisation/issues/new/choose">Start a thread</a>
+      <a class="btn" href="hackathons.html">Hackathons & ideas</a>
+      <a class="btn ghost" href="https://github.com/crabsoupT0T/code-improvisation/issues/new/choose">Start a thread</a>
       <a class="btn ghost" href="https://github.com/crabsoupT0T/code-improvisation">Open the repo</a>
     </div>
   </main>
